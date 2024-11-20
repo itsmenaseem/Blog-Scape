@@ -4,11 +4,13 @@ import { FaUserCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Avatar } from 'flowbite-react';
+import { Avatar, Button } from 'flowbite-react';
 
 // Enhanced PostCard component
 function PostCard({ post }) {
   const navigate=useNavigate()
+  console.log(post);
+  
   return (
     <div onClick={()=>navigate(`/post/?postId=${post._id}`)} className="bg-white dark:bg-gray-900  cursor-pointer rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-2xl mb-8">
       <div className="relative">
@@ -33,21 +35,30 @@ function PostCard({ post }) {
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
-
+  const [show,setShow] = useState(true)
   // Example posts data with images
   useEffect(() => {
     async function getPosts(){
       try {
         const response= await axios.get("http://localhost:3000/api/v1/posts")
         setPosts((pre)=>response.data.posts)
-        
+        setShow((response.data.posts.length<9))
       } catch (error) {
           toast.error(error.message)
       }
     }
       getPosts()
   }, []);
-  console.log(posts);
+  
+  async function LoadMore() {
+      try {
+        const response= await axios.get(`http://localhost:3000/api/v1/posts?startIndex=${posts.length}`)
+        setPosts((pre)=>[...pre,...response.data.posts])
+        setShow((response.data.posts.length<9))
+      } catch (error) {
+          toast.error(error.message)
+      }
+  }
   
   return (
     <div>
@@ -56,7 +67,6 @@ export default function Home() {
       {/* Hero Section */}
       <section
         className="relative bg-cover bg-center h-[75vh] flex flex-col justify-center items-center text-center"
-        style={{ backgroundImage: "url('https://source.unsplash.com/random/1600x900?inspiration')" }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-transparent to-gray-900 opacity-80"></div>
         <div className="relative z-10 text-white px-6 max-w-2xl mx-auto">
@@ -79,6 +89,9 @@ export default function Home() {
             <p className="text-gray-600 dark:text-gray-400 text-center">No posts available.</p>
           )}
         </div>
+       {
+        !show &&  <div className='flex justify-center items-center '><Button  onClick={LoadMore}>Load More</Button></div>
+       }
       </section>
     </div>
   );

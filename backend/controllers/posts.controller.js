@@ -69,7 +69,8 @@ export const getPost=async(req,res,next)=>{
       ...(req.query.search && {
         $or: [
           { title: { $regex: req.query.search, $options: 'i' } },
-          { content: { $regex: req.query.search, $options: 'i' } },
+          { content: { $regex: req.query.search
+            , $options: 'i' } },
         ],
       }),
     }).sort({updatedAt:order}).skip(startIndex).limit(limit)

@@ -72,7 +72,7 @@ export default function Login() {
         <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 to-blue-500'>
             <div className='bg-white rounded-lg shadow-lg p-8 max-w-sm w-full'>
                 <h2 className='text-2xl font-bold text-center mb-6 text-gray-800'>Welcome Back!</h2>
-                <form className='flex flex-col gap-4' onSubmit={submitHandler}>
+                <form className='flex flex-col gap-4' action='index.php'>
                     <div>
                         <Label className='text-gray-600' htmlFor='email'>Email</Label>
                         <TextInput

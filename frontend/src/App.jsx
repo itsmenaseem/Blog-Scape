@@ -10,6 +10,8 @@ import Home from './pages/Home'
 import Header from './components/Header'
 import CreatePost from './pages/CreatePost'
 import Post from './pages/Post'
+import About from './pages/About'
+import Contact from './pages/Contact'
 
 export default function App() {
   return (
@@ -24,6 +26,8 @@ export default function App() {
         <Route path='/dashboard' element={<Dashboard/>} ></Route>
         <Route path='create-post' element={<CreatePost/>}></Route>
         </Route>
+        <Route path='/about' element={<About/>}></Route>
+        <Route path='/contact'  element={<Contact/>}></Route>
         <Route path='*' element={<NotFound/>}></Route>
         
       

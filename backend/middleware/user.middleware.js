@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken"
 import User from "../models/user.model.js"
 import errorHandler from "../lib/error.js"
+
+
 export const userMiddleware=async(req,res,next)=>{
     
     try {

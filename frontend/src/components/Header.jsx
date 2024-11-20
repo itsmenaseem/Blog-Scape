@@ -74,7 +74,7 @@ export default function Header() {
                 />
                 
                 {search && search.length > 0 && (
-                    <div className="absolute top-full mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto z-10 dark:bg-gray-800 dark:border-gray-600">
+                    <div className="absolute z-30 top-full mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto z-10 dark:bg-gray-800 dark:border-gray-600">
                         {search.map((post) => (
                             <div
                                 key={post._id}

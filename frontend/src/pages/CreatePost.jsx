@@ -3,7 +3,7 @@ import { Button, Select, TextInput } from 'flowbite-react';
 import DOMPurify from 'dompurify';
 import axios from "axios";
 import { useQuill } from 'react-quilljs';
-import 'quill/dist/quill.snow.css';
+// import 'quill/dist/quill.snow.css';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/userSlice';
 import { toast } from 'react-toastify';

@@ -123,6 +123,36 @@ export default function CreatePost() {
         setPreviousImages([]);
         quill.setText('');
     };
+ async function generateContent() {
+  if (!title) return;
+
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/v1/posts/gen",
+      { title },
+      { withCredentials: true }
+    );
+
+    let generatedContent = response.data.data || "";
+
+    // Sanitize HTML
+    const cleanHTML = DOMPurify.sanitize(generatedContent, {
+      ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'a', 'img'],
+      ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'target'],
+    });
+
+    // Optional: wrap plain text lines in paragraphs if needed
+    const wrappedContent = cleanHTML.includes('<') ? cleanHTML : generatedContent.split('\n').map(line => `<p>${line.trim()}</p>`).join('');
+
+    if (quill) {
+      quill.setText(''); // Clear existing
+      quill.clipboard.dangerouslyPasteHTML(wrappedContent);
+    }
+  } catch (error) {
+    toast.error("Unable to generate");
+  }
+}
+
 
     return (
         <div className='flex flex-col justify-center items-center p-8 gap-4 min-h-screen bg-gray-50 dark:bg-gray-900'>
@@ -165,13 +195,20 @@ export default function CreatePost() {
                 <div className='mt-4'>
                     <div ref={quillRef} className='border border-gray-300 dark:border-gray-600' />
                 </div>
-                <Button 
-                    className='w-full mt-6 bg-blue-600 text-white' 
+               <div className='flex gap-2'>
+                 <Button 
+                    className='w-[60%] mt-6 bg-blue-600 text-white' 
                     type='button' 
                     onClick={onsubmit}
                 >
                     Publish
                 </Button>
+                <Button className='flex-1 mt-6 bg-blue-600 text-white'
+                    onClick={generateContent}
+                >
+                    Generate
+                </Button>
+               </div>
             </div>
         </div>
     );

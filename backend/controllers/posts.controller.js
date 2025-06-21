@@ -209,3 +209,34 @@ export const updatePost=async(req,res)=>{
     }
 }
 
+
+import { GoogleGenAI } from "@google/genai";
+import dotenv from "dotenv";
+dotenv.config();
+
+const ai = new GoogleGenAI({apiKey:process.env.GEMINI_API_KEY });
+
+export const generateBlogContent = async (req, res) => {
+  const { title } = req.body;
+  if (!title || title.trim().length === 0) {
+    return res.status(400).json({ error: "Title is required" });
+  }
+
+  try {
+    // Get the model
+    // Use `generateContent` for text-only prompts
+    const response = await ai.models.generateContent({
+         model: "gemini-2.5-flash",
+        contents: `Write a detailed blog article on "${title}" with headings, bullet points, and code blocks in Markdown format.
+`,
+    })
+
+    // const content = result.response.text();
+    res.status(200).json({ data:response.text });
+
+  } catch (error) {
+    console.error("Gemini Error:", error);
+    res.status(500).json({ error: "Content generation failed" });
+  }
+};
+
